@@ -24,6 +24,13 @@ class CoolUtil
 
 		return daList;
 	}
+
+	public static function coolTextFileString(path:String):String
+	{
+		var daThing:String = Assets.getText(path).trim();
+		
+		return daThing;
+	}
 	
 	public static function coolStringFile(path:String):Array<String>
 		{
