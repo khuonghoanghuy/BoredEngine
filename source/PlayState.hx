@@ -748,12 +748,12 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
-		if (OptionsData.npsTxt){
-			npsTxt = new FlxText(5, FlxG.height - 36, 0, "", 12);
-			npsTxt.scrollFactor.set();
-			npsTxt.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-			add(npsTxt);
-		}
+		// if (OptionsData.npsTxt){
+		// 	npsTxt = new FlxText(5, FlxG.height - 36, 0, "", 12);
+		// 	npsTxt.scrollFactor.set();
+		// 	npsTxt.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		// 	add(npsTxt);
+		// }
 
 		var botplayTxt:FlxText = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (OptionsData.downscroll ? 100 : -100), 0, "" + CoolUtil.coolTextFile(Paths.txt("botplayText")), 20);
 		botplayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
@@ -1476,9 +1476,9 @@ class PlayState extends MusicBeatState
 			scoreTxt.text = "Score:" + songScore;
 		}
 
-		if (OptionsData.npsTxt){
-			npsTxt.text = "NPS: " + nps + "(Max: " + maxNPS + " )";
-		}
+		// if (OptionsData.npsTxt){
+		// 	npsTxt.text = "NPS: " + nps + "(Max: " + maxNPS + " )";
+		// }
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{

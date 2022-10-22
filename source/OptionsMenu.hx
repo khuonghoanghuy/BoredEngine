@@ -35,8 +35,8 @@ class OptionsMenu extends MusicBeatState
 			"\n" + (OptionsData.newInput ? "New input" : "Old Input") + 
 			"\n" + (OptionsData.downscroll ? 'Downscroll' : 'Upscroll') +
 			"\nAccuracy " + (OptionsData.accuracy ? "on" : "off") +
-			"\nBotplay " + (OptionsData.botplay ? "on" : "off") +
-			"\nNps Text " + (OptionsData.npsTxt ? "on" : "off")
+			"\nBotplay " + (OptionsData.botplay ? "on" : "off")
+			// "\nNps Text " + (OptionsData.npsTxt ? "on" : "off")
 		);
 		
 		// trace(controlsStrings);
@@ -156,12 +156,12 @@ class OptionsMenu extends MusicBeatState
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 4;
 						grpControls.add(ctrl);
-					case 5:
-						OptionsData.npsTxt = !OptionsData.npsTxt;
-						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Nps Text " + (OptionsData.npsTxt ? "on" : "off"), true, false);
-						ctrl.isMenuItem = true;
-						ctrl.targetY = curSelected - 5;
-						grpControls.add(ctrl);
+					// case 5:
+					// 	OptionsData.npsTxt = !OptionsData.npsTxt;
+					// 	var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Nps Text " + (OptionsData.npsTxt ? "on" : "off"), true, false);
+					// 	ctrl.isMenuItem = true;
+					// 	ctrl.targetY = curSelected - 5;
+					// 	grpControls.add(ctrl);
 				}
 
 				FlxG.save.flush();
@@ -198,8 +198,8 @@ class OptionsMenu extends MusicBeatState
 				optionstxt.text = "Display Accuracy system";
 			case 4:
 				optionstxt.text = "Showcase your chart or auto play";
-			case 5:
-				optionstxt.text = "Display Per Note you are click";
+			// scase 5:
+			// s	optionstxt.text = "Display Per Note you are click";
 		}
 
 		var bullShit:Int = 0;
