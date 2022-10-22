@@ -15,7 +15,6 @@ class OptionsData
     public static var accuracy:Bool;
     public static var botplay:Bool;
     public static var dfjk:Bool;
-    // public static var npsTxt:Bool;
     
     static function gameData():Void 
     {
@@ -34,9 +33,6 @@ class OptionsData
         if (FlxG.save.data.botplay == null)
 			FlxG.save.data.botplay = false;
 
-        // if (FlxG.save.data.npsTxt == null)
-		// 	FlxG.save.data.npsTxt = false;
-
         saveData();
 
         FlxG.save.flush();
@@ -49,7 +45,6 @@ class OptionsData
         FlxG.save.data.accuracyDisplay = accuracy;
         FlxG.save.data.botplay = botplay;
         FlxG.save.data.dfjk = dfjk;
-        // FlxG.save.data.npsTxt = npsTxt;
 
         FlxG.save.flush();
         FlxG.save.bind('funkin', 'ninjamuffin99');
@@ -64,7 +59,6 @@ class OptionsData
         OptionsData.accuracy = FlxG.save.data.accuracyDisplay;
         OptionsData.botplay = FlxG.save.data.botplay;
         OptionsData.dfjk = FlxG.save.data.dfjk;
-        // OptionsData.npsTxt = FlxG.save.data.npsTxt;
 
         FlxG.save.flush();
         FlxG.save.bind('funkin', 'ninjamuffin99');

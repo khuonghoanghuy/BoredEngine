@@ -132,12 +132,6 @@ class PlayState extends MusicBeatState
 	var scoreTxt:FlxText;
 	var replayTxt:FlxText;
 
-	var nps:Int = 0;
-	var maxNPS:Int = 0;
-	var npsTxt:FlxText;
-
-	var notesHitArray:Array<Date> = [];
-
 	public static var campaignScore:Int = 0;
 
 	var defaultCamZoom:Float = 1.05;
@@ -748,13 +742,6 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
-		// if (OptionsData.npsTxt){
-		// 	npsTxt = new FlxText(5, FlxG.height - 36, 0, "", 12);
-		// 	npsTxt.scrollFactor.set();
-		// 	npsTxt.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		// 	add(npsTxt);
-		// }
-
 		var botplayTxt:FlxText = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (OptionsData.downscroll ? 100 : -100), 0, "" + CoolUtil.coolTextFile(Paths.txt("botplayText")), 20);
 		botplayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();
@@ -780,7 +767,6 @@ class PlayState extends MusicBeatState
 		watermark.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
 		replayTxt.cameras = [camHUD];
-		npsTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
 		// if (SONG.song == 'South')
@@ -1433,22 +1419,6 @@ class PlayState extends MusicBeatState
 				iconP1.animation.play('bf-old');
 		}
 
-		{
-			var balls = notesHitArray.length - 1;
-			while (balls >= 0)
-			{
-				var cock:Date = notesHitArray[balls];
-				if (cock != null && cock.getTime() + 1000 < Date.now().getTime())
-					notesHitArray.remove(cock);
-				else
-					balls = 0;
-				balls--;
-			}
-			nps = notesHitArray.length;
-			if (nps > maxNPS)
-				maxNPS = nps;
-		}
-
 		switch (curStage)
 		{
 			case 'philly':
@@ -1475,10 +1445,6 @@ class PlayState extends MusicBeatState
 		{
 			scoreTxt.text = "Score:" + songScore;
 		}
-
-		// if (OptionsData.npsTxt){
-		// 	npsTxt.text = "NPS: " + nps + "(Max: " + maxNPS + " )";
-		// }
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
