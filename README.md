@@ -15,6 +15,7 @@ so is a rewrite of kade engine 1.2 with some added and edit like:
 - FPS System:
  > FPS Cap 60 (default)
  > FPS Cap System
+ > A Unlimited FPS Cap
 
 - OptionsData.hx:
  > Added!

@@ -22,6 +22,10 @@ class OptionsMenu extends MusicBeatState
 
 	private var grpControls:FlxTypedGroup<Alphabet>;
 	var versionShit:FlxText;
+	var fpsText:FlxText;
+
+	var FPS:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('fps')));
+
 	override function create()
 	{
 		var menuBG:FlxSprite = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
@@ -60,6 +64,11 @@ class OptionsMenu extends MusicBeatState
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
+		fpsText = new FlxText(5, FlxG.height - 36, 0, "FPS (Press F key to setting the FPS) ", 12);
+		fpsText.scrollFactor.set();
+		fpsText.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(fpsText);
+
 		super.create();
 	}
 
@@ -73,7 +82,11 @@ class OptionsMenu extends MusicBeatState
 				changeSelection(-1);
 			if (controls.DOWN_P)
 				changeSelection(1);
-			
+
+			if (FlxG.keys.justPressed.F){
+				openSubState(new options.FpsSubState());
+			}
+
 			if (controls.RIGHT_R)
 			{
 				FlxG.save.data.offset++;
@@ -81,12 +94,11 @@ class OptionsMenu extends MusicBeatState
 			}
 
 			if (controls.LEFT_R)
-				{
-					FlxG.save.data.offset--;
-					versionShit.text = "Offset (Left, Right): " + FlxG.save.data.offset;
-				}
+			{
+				FlxG.save.data.offset--;
+				versionShit.text = "Offset (Left, Right): " + FlxG.save.data.offset;
+			}
 	
-
 			if (controls.ACCEPT)
 			{
 				grpControls.remove(grpControls.members[curSelected]);

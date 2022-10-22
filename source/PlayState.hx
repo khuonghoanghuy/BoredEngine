@@ -1646,19 +1646,17 @@ class PlayState extends MusicBeatState
 			}
 		}
 
-		if (OptionsData.botplay){ //cant even dead
+		if (botplayMode && health <= 0){ //cant even dead
 			boyfriend.stunned = false;
 
 			persistentUpdate = true;
 			persistentDraw = true;
-			paused = true;
+			canPause = true;
+
+			paused = false;
+
 			songScore = 0;
 			misses = 0;
-
-			if (health <= 0){
-				// wait(0)
-				health += 2;
-			}
 		}
 		else if (health <= 0)
 		{
@@ -1739,7 +1737,7 @@ class PlayState extends MusicBeatState
 
 					if (daNote.mustPress && daNote.canBeHit && OptionsData.botplay)
 					{
-						if (daNote.wasGoodHit)
+						if (!daNote.wasGoodHit)
 						{
 							switch (Math.abs(daNote.noteData))
 							{
@@ -1761,6 +1759,14 @@ class PlayState extends MusicBeatState
 							daNote.kill();
 							notes.remove(daNote, true);
 							daNote.destroy();
+
+							if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !controls.UP && !controls.DOWN && !controls.RIGHT && !controls.LEFT)
+							{
+								if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss') && botplayMode)
+								{
+									boyfriend.playAnim('idle');
+								}
+							}
 						}
 					}
 	
@@ -2099,7 +2105,7 @@ class PlayState extends MusicBeatState
 		var rightHold:Bool = false;
 		var leftHold:Bool = false;	
 
-	private function keyShit():Void
+	public function keyShit():Void
 	{
 		// HOLDING
 		var up = controls.UP;
@@ -2337,9 +2343,9 @@ class PlayState extends MusicBeatState
 				});
 			}
 	
-			if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !up && !down && !right && !left && OptionsData.botplay)
+			if (boyfriend.holdTimer > Conductor.stepCrochet * 4 * 0.001 && !up && !down && !right && !left)
 			{
-				if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss') && !OptionsData.botplay)
+				if (boyfriend.animation.curAnim.name.startsWith('sing') && !boyfriend.animation.curAnim.name.endsWith('miss'))
 				{
 					boyfriend.playAnim('idle');
 				}

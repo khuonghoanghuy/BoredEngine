@@ -62,7 +62,7 @@ class Paths
 
 	inline static public function optionsTxt(key:String, ?library:String)
 	{
-		return getPath('options/$key.txt', TEXT, library);
+		return getPath('data/options/$key.txt', TEXT, library);
 	}
 
 	inline static public function xml(key:String, ?library:String)
