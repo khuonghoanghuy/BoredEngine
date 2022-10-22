@@ -27,6 +27,7 @@ class FpsSubState extends MusicBeatSubstate
 	var fpsText:FlxText;
 
 	var FPS:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('fps')));
+    var versionShit:FlxText;
 
     var transIn = FlxTransitionableState.defaultTransIn;
     var transOut = FlxTransitionableState.defaultTransOut;
@@ -42,11 +43,23 @@ class FpsSubState extends MusicBeatSubstate
 		bg.scrollFactor.set();
 		add(bg);
 
-        fpsText = new FlxText(0,0,0,"FPS: " + Std.string(FPS), 18);
+        titleText = new FlxText(0,30,0,"FPS Setting",30);
+        titleText.screenCenter(X);
+        titleText.scrollFactor.set();
+        titleText.setFormat("VCR OSD Mono", 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+        add(titleText);
+
+        fpsText = new FlxText(0,100,0,"FPS: " + Std.string(FPS), 30);
         // fpsText.alpha = 0;
-		fpsText.scrollFactor.set();
-        fpsText.screenCenter();
+        fpsText.screenCenter(X);
+        fpsText.scrollFactor.set();
+        fpsText.setFormat("VCR OSD Mono", 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
         add(fpsText);
+
+        versionShit = new FlxText(5, FlxG.height - 18, 0, "Press Esc to return options | Press Left to -10 FPS | Press Right to +10 FPS", 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
 
 		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
 
@@ -60,20 +73,25 @@ class FpsSubState extends MusicBeatSubstate
 		super.update(elapsed);
 
         if (controls.BACK){
-			FlxTransitionableState.skipNextTransIn = true;
-			FlxTransitionableState.skipNextTransOut = true;
-            FlxG.state.closeSubState();
+			// FlxTransitionableState.skipNextTransIn = true;
+			// FlxTransitionableState.skipNextTransOut = true;
+            // FlxG.state.closeSubState();
             FlxG.switchState(new OptionsMenu());
+            sys.io.File.saveContent(Paths.txt('options/fps'), Std.string(FPS));
+            FlxG.updateFramerate = Std.parseInt(CoolUtil.coolTextFileString(Paths.txt('options/fps')));
+            FlxG.drawFramerate = Std.parseInt(CoolUtil.coolTextFileString(Paths.txt('options/fps')));    
         }
 
-        if (controls.LEFT_P){
+        fpsText.text = "FPS: " + Std.string(FPS);
+
+        if (controls.LEFT_R && FPS >= 70){
             FPS -= 10;
             sys.io.File.saveContent(Paths.txt('options/fps'), Std.string(FPS));
             FlxG.updateFramerate = Std.parseInt(CoolUtil.coolTextFileString(Paths.txt('options/fps')));
             FlxG.drawFramerate = Std.parseInt(CoolUtil.coolTextFileString(Paths.txt('options/fps')));       
         }
 
-        if (controls.RIGHT_P){
+        if (controls.RIGHT_R){
             FPS += 10;
             sys.io.File.saveContent(Paths.txt('options/fps'), Std.string(FPS));
             FlxG.updateFramerate = Std.parseInt(CoolUtil.coolTextFileString(Paths.txt('options/fps')));

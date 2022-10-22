@@ -23,8 +23,9 @@ class OptionsMenu extends MusicBeatState
 	private var grpControls:FlxTypedGroup<Alphabet>;
 	var versionShit:FlxText;
 	var fpsText:FlxText;
-
+	var scoreText:FlxText;
 	var FPS:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('fps')));
+	var optionstxt:FlxText;
 
 	override function create()
 	{
@@ -38,7 +39,7 @@ class OptionsMenu extends MusicBeatState
 			"\nNps Text " + (OptionsData.npsTxt ? "on" : "off")
 		);
 		
-		trace(controlsStrings);
+		// trace(controlsStrings);
 
 		menuBG.color = 0xFFea71fd;
 		menuBG.setGraphicSize(Std.int(menuBG.width * 1.1));
@@ -49,6 +50,8 @@ class OptionsMenu extends MusicBeatState
 
 		grpControls = new FlxTypedGroup<Alphabet>();
 		add(grpControls);
+
+		FlxG.save.bind('funkin', 'ninjamuffin99');
 
 		for (i in 0...controlsStrings.length)
 		{
@@ -69,6 +72,16 @@ class OptionsMenu extends MusicBeatState
 		fpsText.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(fpsText);
 
+		optionstxt = new FlxText(0, FlxG.height * 0.9 + -50, FlxG.width, "Change WASD or DFJK key", 30);
+		optionstxt.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		optionstxt.scrollFactor.set();
+		add(optionstxt);
+
+		// scoreText = new FlxText(5, FlxG.height - 54, 0, "Score Options (Press V to setting the Score System)", 12);
+		// scoreText.scrollFactor.set();
+		// scoreText.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		// add(scoreText);
+
 		super.create();
 	}
 
@@ -86,6 +99,10 @@ class OptionsMenu extends MusicBeatState
 			if (FlxG.keys.justPressed.F){
 				openSubState(new options.FpsSubState());
 			}
+
+			// if (FlxG.keys.justPressed.V){
+			// 	openSubState(new options.ScoreSystemState());
+			// }
 
 			if (controls.RIGHT_R)
 			{
@@ -146,8 +163,9 @@ class OptionsMenu extends MusicBeatState
 						ctrl.targetY = curSelected - 5;
 						grpControls.add(ctrl);
 				}
+
+				FlxG.save.flush();
 			}
-		FlxG.save.flush();
 	}
 
 	var isSettingControl:Bool = false;
@@ -168,6 +186,21 @@ class OptionsMenu extends MusicBeatState
 			curSelected = 0;
 
 		// selector.y = (70 * curSelected) + 30;
+
+		switch(curSelected){
+			case 0:
+				optionstxt.text = "Change WASD or DFJK key";
+			case 1:
+				optionstxt.text = "Using New Input or Old Input\nLike Ghost tap";
+			case 2:
+				optionstxt.text = "Change upscroll to downscroll";
+			case 3:
+				optionstxt.text = "Display Accuracy system";
+			case 4:
+				optionstxt.text = "Showcase your chart or auto play";
+			case 5:
+				optionstxt.text = "Display Per Note you are click";
+		}
 
 		var bullShit:Int = 0;
 

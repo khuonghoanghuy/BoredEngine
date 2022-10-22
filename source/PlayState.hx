@@ -132,7 +132,11 @@ class PlayState extends MusicBeatState
 	var scoreTxt:FlxText;
 	var replayTxt:FlxText;
 
+	var nps:Int = 0;
+	var maxNPS:Int = 0;
 	var npsTxt:FlxText;
+
+	var notesHitArray:Array<Date> = [];
 
 	public static var campaignScore:Int = 0;
 
@@ -740,7 +744,7 @@ class PlayState extends MusicBeatState
 		scoreTxt = new FlxText(0, healthBarBG.y + 36, FlxG.width, "", 20);
 		/*if (!OptionsData.accuracy)
 			scoreTxt.x = healthBarBG.x + healthBarBG.width / 2;*/
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 18, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		scoreTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
@@ -751,7 +755,7 @@ class PlayState extends MusicBeatState
 			add(npsTxt);
 		}
 
-		var botplayTxt:FlxText = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (OptionsData.downscroll ? 100 : -100), 0, "BOTPLAY", 20);
+		var botplayTxt:FlxText = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (OptionsData.downscroll ? 100 : -100), 0, "" + CoolUtil.coolTextFile(Paths.txt("botplayText")), 20);
 		botplayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();
 		if (botplayMode){
@@ -776,6 +780,7 @@ class PlayState extends MusicBeatState
 		watermark.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
 		replayTxt.cameras = [camHUD];
+		npsTxt.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
 		// if (SONG.song == 'South')
@@ -1428,6 +1433,22 @@ class PlayState extends MusicBeatState
 				iconP1.animation.play('bf-old');
 		}
 
+		{
+			var balls = notesHitArray.length - 1;
+			while (balls >= 0)
+			{
+				var cock:Date = notesHitArray[balls];
+				if (cock != null && cock.getTime() + 1000 < Date.now().getTime())
+					notesHitArray.remove(cock);
+				else
+					balls = 0;
+				balls--;
+			}
+			nps = notesHitArray.length;
+			if (nps > maxNPS)
+				maxNPS = nps;
+		}
+
 		switch (curStage)
 		{
 			case 'philly':
@@ -1453,6 +1474,10 @@ class PlayState extends MusicBeatState
 		else
 		{
 			scoreTxt.text = "Score:" + songScore;
+		}
+
+		if (OptionsData.npsTxt){
+			npsTxt.text = "NPS: " + nps + "(Max: " + maxNPS + " )";
 		}
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
@@ -1917,18 +1942,22 @@ class PlayState extends MusicBeatState
 			var coolText:FlxText = new FlxText(0, 0, 0, placement, 32);
 			coolText.screenCenter();
 			coolText.x = FlxG.width * 0.55;
-			//
 	
 			var rating:FlxSprite = new FlxSprite();
-			var score:Int = 350;
-	
+			var score:Int = 0;
+
+			var sicksScore:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('sicks')));
+			var goodsScore:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('goods')));
+			var badsScore:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('bads')));
+			var shitsScore:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('shits')));
+
 			var daRating:String = "sick";
 	
 			if (noteDiff > Conductor.safeZoneOffset * 2)
 				{
 					daRating = 'shit';
 					totalNotesHit += 0.05;
-					score = 50;
+					score = shitsScore;
 					ss = false;
 					shits++;
 				}
@@ -1936,14 +1965,14 @@ class PlayState extends MusicBeatState
 				{
 					daRating = 'shit';
 					totalNotesHit += 0.05;
-					score = 50;
+					score = shitsScore;
 					ss = false;
 					shits++;
 				}
 				else if (noteDiff > Conductor.safeZoneOffset * 0.45)
 				{
 					daRating = 'bad';
-					score = -1000;
+					score = badsScore;
 					totalNotesHit += 0.2;
 					ss = false;
 					bads++;
@@ -1952,12 +1981,13 @@ class PlayState extends MusicBeatState
 				{
 					daRating = 'good';
 					totalNotesHit += 0.65;
-					score = 200;
+					score = goodsScore;
 					ss = false;
 					goods++;
 				}
 			if (daRating == 'sick')
 			{
+				score = sicksScore;
 				totalNotesHit += 1;
 				sicks++;
 			}
@@ -1967,8 +1997,10 @@ class PlayState extends MusicBeatState
 				{
 	
 	
-			songScore += score;
-	
+			songScore += sicksScore;
+			songScore += goodsScore;
+			songScore += badsScore;
+			songScore += shitsScore;	
 			/* if (combo > 60)
 					daRating = 'sick';
 				else if (combo > 12)
