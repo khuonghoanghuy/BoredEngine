@@ -22,10 +22,10 @@ so is a rewrite of kade engine 1.2 with some added and edit like:
  > - A Unlimited FPS Cap
 
 - OptionsData.hx:
- > Added!
+ > - Added!
 
 - Some code has been Softcode
- > YAY!
+ > - YAY!
 
 And more...
 
