@@ -189,23 +189,6 @@ class PlayState extends MusicBeatState
 
 		switch (SONG.song.toLowerCase())
 		{
-			case 'tutorial':
-				dialogue = ["Hey you're pretty cute.", 'Use the arrow keys to keep up \nwith me singing.'];
-			case 'bopeebo':
-				dialogue = [
-					'HEY!',
-					"You think you can just sing\nwith my daughter like that?",
-					"If you want to date her...",
-					"You're going to have to go \nthrough ME first!"
-				];
-			case 'fresh':
-				dialogue = ["Not too shabby boy.", ""];
-			case 'dadbattle':
-				dialogue = [
-					"gah you think you're hot stuff?",
-					"If you can beat me here...",
-					"Only then I will even CONSIDER letting you\ndate my daughter!"
-				];
 			case 'senpai':
 				dialogue = CoolUtil.coolTextFile(Paths.txt('senpai/senpaiDialogue'));
 			case 'roses':
@@ -1320,25 +1303,29 @@ class PlayState extends MusicBeatState
 		return num;
 		}
 
-	function generateRanking():String
-	{
-		var ranking:String = "N/A";
-	
-		if (misses == 0 && bads == 0 && shits == 0 && goods == 0) // Marvelous (SICK) Full Combo
-			ranking = "(MFC)";
-		else if (misses == 0 && bads == 0 && shits == 0 && goods >= 1) // Good Full Combo (Nothing but Goods & Sicks)
-			ranking = "(GFC)";
-		else if ((shits < 0 && shits != 0 || bads < 10 && bads != 0) && misses == 0) // Single Digit Combo Breaks
-			ranking = "(SDCB)";
-		else if (misses == 0 && (shits >= 0 || bads >= 0)) // Regular FC
-			ranking = "(FC)";
-		else if (misses >= 10 || (shits >= 10 || bads >= 10)) // Combo Breaks
-			ranking = "(CB)";
-		else
-			ranking = "(Clear)";
-	
-		// WIFE TIME :)))) (based on Wife3)
-	
+	function letterRanking():String{
+		// Rank Letter
+		var case0 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank0'));
+		var case1 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank1'));
+		var case2 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank2'));
+		var case3 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank3'));
+		var case4 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank4'));
+		var case5 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank5'));
+		var case6 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank6'));
+		var case7 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank7'));
+		var case8 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank8'));
+		var case9 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank9'));
+		var case10 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank10'));
+		var case11 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank11'));
+		var case12 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank12'));
+		var case13 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank13'));
+		var case14 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank14'));
+		var case15 = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rank15'));
+
+		var defaultRank = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/letterRank/rankingDefault'));
+		
+		var ranking = defaultRank;
+		
 		var wifeConditions:Array<Bool> = [
 			accuracy >= 99.9935, // AAAAA
 			accuracy >= 99.980, // AAAA:
@@ -1366,44 +1353,73 @@ class PlayState extends MusicBeatState
 				switch(i)
 				{
 					case 0:
-						ranking += " AAAAA";
+						ranking += case0;
 					case 1:
-						ranking += " AAAA:";
+						ranking += case1;
 					case 2:
-						ranking += " AAAA.";
+						ranking += case2;
 					case 3:
-						ranking += " AAAA";
+						ranking += case3;
 					case 4:
-						ranking += " AAA:";
+						ranking += case4;
 					case 5:
-						ranking += " AAA.";
+						ranking += case5;
 					case 6:
-						ranking += " AAA";
+						ranking += case6;
 					case 7:
-						ranking += " AA:";
+						ranking += case7;
 					case 8:
-						ranking += " AA.";
+						ranking += case8;
 					case 9:
-						ranking += " AA";
+						ranking += case9;
 					case 10:
-						ranking += " A:";
+						ranking += case10;
 					case 11:
-						ranking += " A.";
+						ranking += case11;
 					case 12:
-						ranking += " A";
+						ranking += case12;
 					case 13:
-						ranking += " B";
+						ranking += case13;
 					case 14:
-						ranking += " C";
+						ranking += case14;
 					case 15:
-						ranking += " D";
+						ranking += case15;
 				}
 				break;
 			}
 		}
 
 		if (accuracy == 0)
-			ranking = "N/A";
+			ranking = defaultRank;
+	
+		return ranking;
+	}
+
+	function generateRanking():String
+	{
+		// Rank Text
+		var mfcRank = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/rank1'));
+		var gfcRank = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/rank2'));
+		var sdcbRank = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/rank3'));
+		var fcRank = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/rank4'));
+		var cbRank = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/rank5'));
+		var clearRank = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/rank6'));
+		var defaultRank = CoolUtil.coolTextFileString(Paths.optionsTxt('acc_rank/rankingDefault'));
+
+		var ranking = defaultRank;
+	
+		if (misses == 0 && bads == 0 && shits == 0 && goods == 0) // Marvelous (SICK) Full Combo
+			ranking = mfcRank;
+		else if (misses == 0 && bads == 0 && shits == 0 && goods >= 1) // Good Full Combo (Nothing but Goods & Sicks)
+			ranking = gfcRank;
+		else if ((shits < 0 && shits != 0 || bads < 10 && bads != 0) && misses == 0) // Single Digit Combo Breaks
+			ranking = sdcbRank;
+		else if (misses == 0 && (shits >= 0 || bads >= 0)) // Regular FC
+			ranking = fcRank;
+		else if (misses >= 10 || (shits >= 10 || bads >= 10)) // Combo Breaks
+			ranking = cbRank;
+		else
+			ranking = clearRank;
 	
 		return ranking;
 	}
@@ -1442,7 +1458,7 @@ class PlayState extends MusicBeatState
 
 		if (OptionsData.accuracy)
 		{
-			scoreTxt.text = "Score: " + songScore + " | Misses: " + misses + " | Accuracy: " + truncateFloat(accuracy, 2) + "%" + " | " + generateRanking();
+			scoreTxt.text = "Score: " + songScore + " | Misses: " + misses + " | Accuracy: " + truncateFloat(accuracy, 2) + "%" + " | " + generateRanking() + " " + letterRanking();
 		}
 		else
 		{

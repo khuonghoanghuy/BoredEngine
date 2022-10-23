@@ -342,7 +342,7 @@ class TitleState extends MusicBeatState
 		switch (curBeat)
 		{
 			case 1:
-				createCoolText(['ninjamuffin99', 'phantomArcade', 'kawaisprite', 'evilsk8er']);
+				createCoolText(['Huy1234TH']);
 			// credTextShit.visible = true;
 			case 3:
 				addMoreText('present');
@@ -354,9 +354,9 @@ class TitleState extends MusicBeatState
 			// credTextShit.text = 'In association \nwith';
 			// credTextShit.screenCenter();
 			case 5:
-				createCoolText(['Kade Engine', 'by']);
+				createCoolText(['Bored Engine', 'by']);
 			case 7:
-				addMoreText('KadeDeveloper');
+				addMoreText('Huy1234TH');
 			// credTextShit.text += '\nNewgrounds';
 			case 8:
 				deleteCoolText();
