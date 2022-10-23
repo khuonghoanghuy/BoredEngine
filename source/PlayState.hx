@@ -128,9 +128,10 @@ class PlayState extends MusicBeatState
 	var wiggleShit:WiggleEffect = new WiggleEffect();
 
 	var talking:Bool = true;
-	var songScore:Int = 0;
+	var songScore:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('scoreDefault')));
 	var scoreTxt:FlxText;
 	var replayTxt:FlxText;
+	// var botplayText:String = CoolUtil.coolTextFile(Paths.txt("botplayText"));
 
 	public static var campaignScore:Int = 0;
 
@@ -146,6 +147,8 @@ class PlayState extends MusicBeatState
 
 	public static var timeCurrently:Float = 0;
 	public static var timeCurrentlyR:Float = 0;
+
+	var botplayTxt:FlxText;
 
 	override public function create()
 	{
@@ -722,11 +725,6 @@ class PlayState extends MusicBeatState
 		// healthBar
 		add(healthBar);
 
-		var watermark = new FlxText(5,FlxG.height - 18, 0,SONG.song + " " + (storyDifficulty == 2 ? "Hard" : storyDifficulty == 1 ? "Normal" : "Easy") + " - Bored Engine: " + OptionsData.engineVer, 16);
-		watermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
-		watermark.scrollFactor.set();
-		add(watermark);
-
 		iconP1 = new HealthIcon(SONG.player1, true);
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
@@ -742,13 +740,13 @@ class PlayState extends MusicBeatState
 		scoreTxt.scrollFactor.set();
 		add(scoreTxt);
 
-		var botplayTxt:FlxText = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (OptionsData.downscroll ? 100 : -100), 0, "" + CoolUtil.coolTextFile(Paths.txt("botplayText")), 20);
-		botplayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		botplayTxt = new FlxText(0, healthBarBG.y + 72, FlxG.width, "" + (CoolUtil.coolTextFile(Paths.txt("botplayText"))) + "");
+		botplayTxt.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		botplayTxt.scrollFactor.set();
 		if (botplayMode){
 			add(botplayTxt);
 		}
-		
+
 		replayTxt = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 75, healthBarBG.y + (OptionsData.downscroll ? 100 : -100), 0, "REPLAY", 20);
 		replayTxt.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
 		replayTxt.scrollFactor.set();
@@ -757,6 +755,11 @@ class PlayState extends MusicBeatState
 			add(replayTxt);
 		}
 
+		var watermark = new FlxText(5,FlxG.height - 18, 0,SONG.song + " " + (storyDifficulty == 2 ? "Hard" : storyDifficulty == 1 ? "Normal" : "Easy") + " - Bored Engine: " + OptionsData.engineVer, 16);
+		watermark.setFormat(Paths.font("vcr.ttf"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
+		watermark.scrollFactor.set();
+		add(watermark);
+
 		strumLineNotes.cameras = [camHUD];
 		notes.cameras = [camHUD];
 		healthBar.cameras = [camHUD];
@@ -764,9 +767,9 @@ class PlayState extends MusicBeatState
 		iconP1.cameras = [camHUD];
 		iconP2.cameras = [camHUD];
 		scoreTxt.cameras = [camHUD];
-		watermark.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
 		replayTxt.cameras = [camHUD];
+		watermark.cameras = [camHUD];
 		doof.cameras = [camHUD];
 
 		// if (SONG.song == 'South')
@@ -1446,6 +1449,10 @@ class PlayState extends MusicBeatState
 			scoreTxt.text = "Score:" + songScore;
 		}
 
+		/*if (botplayMode){
+			botplayTxt.text = CoolUtil.coolTextFile(Paths.txt("botplayText"));
+		}*/
+
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause)
 		{
 			persistentUpdate = false;
@@ -1910,19 +1917,25 @@ class PlayState extends MusicBeatState
 			coolText.x = FlxG.width * 0.55;
 	
 			var rating:FlxSprite = new FlxSprite();
-			var score:Int = 0;
+			
+			var score:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('scoreDefault')));
 
 			var sicksScore:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('sicks')));
 			var goodsScore:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('goods')));
 			var badsScore:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('bads')));
 			var shitsScore:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('shits')));
 
+			var sicksHit:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('sicksHit')));
+			var goodsHit:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('goodsHit')));
+			var badsHit:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('badsHit')));
+			var shitsHit:Int = Std.parseInt(CoolUtil.coolTextFileString(Paths.optionsTxt('shitsHit')));
+
 			var daRating:String = "sick";
 	
 			if (noteDiff > Conductor.safeZoneOffset * 2)
 				{
 					daRating = 'shit';
-					totalNotesHit += 0.05;
+					totalNotesHit += shitsHit;
 					score = shitsScore;
 					ss = false;
 					shits++;
@@ -1930,7 +1943,7 @@ class PlayState extends MusicBeatState
 				else if (noteDiff < Conductor.safeZoneOffset * -2)
 				{
 					daRating = 'shit';
-					totalNotesHit += 0.05;
+					totalNotesHit += shitsHit;
 					score = shitsScore;
 					ss = false;
 					shits++;
@@ -1939,14 +1952,14 @@ class PlayState extends MusicBeatState
 				{
 					daRating = 'bad';
 					score = badsScore;
-					totalNotesHit += 0.2;
+					totalNotesHit += badsHit;
 					ss = false;
 					bads++;
 				}
 				else if (noteDiff > Conductor.safeZoneOffset * 0.25)
 				{
 					daRating = 'good';
-					totalNotesHit += 0.65;
+					totalNotesHit += goodsHit;
 					score = goodsScore;
 					ss = false;
 					goods++;
@@ -1954,7 +1967,7 @@ class PlayState extends MusicBeatState
 			if (daRating == 'sick')
 			{
 				score = sicksScore;
-				totalNotesHit += 1;
+				totalNotesHit += sicksHit;
 				sicks++;
 			}
 		

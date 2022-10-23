@@ -15,7 +15,7 @@ so is a rewrite of kade engine 1.2 with some added and edit like:
  > - Botplay Text!
 
 - FPS System:
- > - FPS Cap 60 (default)
+ > - FPS Cap 120 (default)
  >
  > - FPS Cap System
  >
