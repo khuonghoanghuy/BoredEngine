@@ -6,6 +6,7 @@ import openfl.system.System;
 import openfl.text.TextField;
 import openfl.text.TextFormat;
 import openfl.Memory;
+import openfl.display.FPS;
 
 /**
  * FPS class extension to display memory usage.
@@ -23,7 +24,7 @@ class MemoryCounter extends TextField
 		x = inX;
 		y = inY;
 		selectable = false;
-		defaultTextFormat = new TextFormat("_sans", 12, inCol);
+		defaultTextFormat = new TextFormat("VCR OSD Mono", 15, inCol);
 
 		addEventListener(Event.ENTER_FRAME, onEnter);
 		width = 150;

@@ -17,14 +17,24 @@ class PauseSubState extends MusicBeatSubstate
 {
 	var grpMenuShit:FlxTypedGroup<Alphabet>;
 
-	var menuItems:Array<String> = ['Resume', 'Restart Song', 'Exit to menu'];
+	var menuItems:Array<String> = [];
 	var curSelected:Int = 0;
 
 	var pauseMusic:FlxSound;
 
+	var practiceMode:FlxText;
+
 	public function new(x:Float, y:Float)
 	{
 		super();
+
+		menuItems = CoolUtil.coolStringFile(
+			"\nResume" +
+			"\nRestart Song" +
+			"\nChart State" +
+			"\nPractice Mode " + (OptionsData.practice ? 'on' : 'off') +
+			"\nExit to menu"
+ 		);
 
 		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
 		pauseMusic.volume = 0;
@@ -99,15 +109,25 @@ class PauseSubState extends MusicBeatSubstate
 
 		if (accepted)
 		{
-			var daSelected:String = menuItems[curSelected];
+			// var daSelected:String = menuItems[curSelected];
 
-			switch (daSelected)
+			grpMenuShit.remove(grpMenuShit.members[curSelected]);
+			switch (curSelected)
 			{
-				case "Resume":
+				case 0:
 					close();
-				case "Restart Song":
+				case 1:
 					FlxG.resetState();
-				case "Exit to menu":
+				case 2:
+					FlxG.switchState(new ChartingState());
+					// OptionsData.practice = true;
+				case 3:
+					OptionsData.practice = !OptionsData.practice;
+					var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Practice Mode " + (OptionsData.practice ? 'on' : 'off'), true, false);
+					ctrl.isMenuItem = true;
+					ctrl.targetY = curSelected - 1;
+					grpMenuShit.add(ctrl);	
+				case 4:
 					PlayState.loadRep = false;
 					FlxG.switchState(new MainMenuState());
 			}

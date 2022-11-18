@@ -83,4 +83,10 @@ class Highscore
 			songScores = FlxG.save.data.songScores;
 		}
 	}
+
+	/*public static function resetScore():Void 
+	{
+		// setScore(song, 0);
+		FlxG.save.data.songScores = 0;
+	}*/
 }

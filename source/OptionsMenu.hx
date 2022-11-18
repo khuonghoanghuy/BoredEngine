@@ -35,7 +35,11 @@ class OptionsMenu extends MusicBeatState
 			"\n" + (OptionsData.newInput ? "New input" : "Old Input") + 
 			"\n" + (OptionsData.downscroll ? 'Downscroll' : 'Upscroll') +
 			"\nAccuracy " + (OptionsData.accuracy ? "on" : "off") +
-			"\nBotplay " + (OptionsData.botplay ? "on" : "off")
+			"\nBotplay " + (OptionsData.botplay ? "on" : "off") +
+			"\nMiddle Scroll " + (OptionsData.middlescroll ? "on" : "off") +
+			"\nScore Color " + (OptionsData.scoreColor ? "on" : "off") +
+			"\nDisable Pop Up " + (OptionsData.disable_popUP ? "on" : "off") +
+			"\nScore Tween " + (OptionsData.scoreTween ? "on" : "off")
 		);
 		
 		// trace(controlsStrings);
@@ -66,10 +70,12 @@ class OptionsMenu extends MusicBeatState
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 
+		#if desktop
 		fpsText = new FlxText(5, FlxG.height - 36, 0, "FPS (Press F key to setting the FPS) ", 12);
 		fpsText.scrollFactor.set();
 		fpsText.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(fpsText);
+		#end
 
 		optionstxt = new FlxText(0, FlxG.height * 0.9 + -50, FlxG.width, "Change WASD or DFJK key", 30);
 		optionstxt.setFormat(Paths.font("vcr.ttf"), 30, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE,FlxColor.BLACK);
@@ -95,9 +101,11 @@ class OptionsMenu extends MusicBeatState
 			if (controls.DOWN_P)
 				changeSelection(1);
 
+			#if desktop
 			if (FlxG.keys.justPressed.F){
 				openSubState(new options.FpsSubState());
 			}
+			#end
 
 			// if (FlxG.keys.justPressed.V){
 			// 	openSubState(new options.ScoreSystemState());
@@ -150,14 +158,37 @@ class OptionsMenu extends MusicBeatState
 						ctrl.targetY = curSelected - 3;
 						grpControls.add(ctrl);
 					case 4:
-						OptionsData.botplay = !OptionsData.botplay;
 						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Botplay " + (OptionsData.botplay ? "on" : "off"), true, false);
 						ctrl.isMenuItem = true;
 						ctrl.targetY = curSelected - 4;
 						grpControls.add(ctrl);
-				}
+					case 5:
+						OptionsData.middlescroll = !OptionsData.middlescroll;
+						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Middle Scroll " + (OptionsData.middlescroll ? "on" : "off"), true, false);
+						ctrl.isMenuItem = true;
+						ctrl.targetY = curSelected - 5;
+						grpControls.add(ctrl);
+					case 6:
+						OptionsData.scoreColor = !OptionsData.scoreColor;
+						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Score Color " + (OptionsData.scoreColor ? "on" : "off"), true, false);
+						ctrl.isMenuItem = true;
+						ctrl.targetY = curSelected - 6;
+						grpControls.add(ctrl);
+					case 7:
+						OptionsData.disable_popUP = !OptionsData.disable_popUP;
+						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Disable Pop Up " + (OptionsData.disable_popUP ? "on" : "off"), true, false);
+						ctrl.isMenuItem = true;
+						ctrl.targetY = curSelected - 7;
+						grpControls.add(ctrl);
+					case 8:
+						OptionsData.scoreTween = !OptionsData.scoreTween;
+						var ctrl:Alphabet = new Alphabet(0, (70 * curSelected) + 30, "Score Tween " + (OptionsData.scoreTween ? "on" : "off"), true, false);
+						ctrl.isMenuItem = true;
+						ctrl.targetY = curSelected - 8;
+						grpControls.add(ctrl);						
 
-				FlxG.save.flush();
+					FlxG.save.flush();
+				}
 			}
 	}
 
@@ -191,6 +222,14 @@ class OptionsMenu extends MusicBeatState
 				optionstxt.text = "Display Accuracy system";
 			case 4:
 				optionstxt.text = "Showcase your chart or auto play";
+			case 5:
+				optionstxt.text = "Center Note Scroll (Beta)";
+			case 6:
+				optionstxt.text = "When icon player 2 loss, score text will green\nWhen icon player 1 loss, score text will red";
+			case 7:
+				optionstxt.text = "Disable Pop Up, will hide the pop up";
+			case 8:
+				optionstxt.text = "Work like Psych, when hit a note\nscore text will tween like beat";
 		}
 
 		var bullShit:Int = 0;
